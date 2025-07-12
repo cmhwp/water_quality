@@ -8,8 +8,11 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 import logging
 import time
+import asyncio
+from contextlib import asynccontextmanager
 from config import settings
 from app.api.v1.api import api_router
+from app.core.security import clean_expired_tokens
 
 # 配置日志
 logging.basicConfig(
@@ -17,6 +20,43 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+
+# 清理过期token的定时任务
+async def cleanup_expired_tokens():
+    """定期清理过期的token"""
+    while True:
+        try:
+            clean_expired_tokens()
+            logger.info("已清理过期的token")
+        except Exception as e:
+            logger.error(f"清理过期token失败: {e}")
+        
+        # 每小时清理一次
+        await asyncio.sleep(3600)
+
+
+# 应用生命周期管理
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """应用生命周期管理"""
+    # 启动时
+    logger.info("应用启动中...")
+    
+    # 启动清理过期token的定时任务
+    cleanup_task = asyncio.create_task(cleanup_expired_tokens())
+    logger.info("定时清理任务已启动")
+    
+    yield
+    
+    # 关闭时
+    logger.info("应用关闭中...")
+    cleanup_task.cancel()
+    try:
+        await cleanup_task
+    except asyncio.CancelledError:
+        logger.info("定时清理任务已停止")
+
 
 # 创建FastAPI应用实例
 app = FastAPI(
@@ -26,6 +66,7 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     docs_url=f"{settings.API_V1_STR}/docs",
     redoc_url=f"{settings.API_V1_STR}/redoc",
+    lifespan=lifespan,
 )
 
 # 添加CORS中间件

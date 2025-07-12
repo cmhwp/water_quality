@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from app.core.security import get_password_hash, verify_password, create_access_token
+from app.core.security import get_password_hash, verify_password, create_access_token, blacklist_token
 from config import settings
 
 
@@ -111,6 +111,16 @@ class UserService:
         """为用户创建访问令牌"""
         token_data = {"sub": str(user.id), "username": user.username}
         return create_access_token(token_data)
+    
+    def logout_user(self, token: str) -> bool:
+        """用户退出登录"""
+        try:
+            # 将token加入黑名单
+            blacklist_token(token)
+            return True
+        except Exception as e:
+            print(f"退出登录失败: {e}")
+            return False
     
     def delete_user(self, user_id: int) -> bool:
         """删除用户"""

@@ -17,6 +17,16 @@ export async function loginApiV1AuthLoginPost(
   });
 }
 
+/** 用户退出登录 用户退出登录 POST /api/v1/auth/logout */
+export async function logoutApiV1AuthLogoutPost(options?: {
+  [key: string]: any;
+}) {
+  return request<any>("/api/v1/auth/logout", {
+    method: "POST",
+    ...(options || {}),
+  });
+}
+
 /** 获取当前用户信息 获取当前用户信息 GET /api/v1/auth/me */
 export async function getCurrentUserInfoApiV1AuthMeGet(options?: {
   [key: string]: any;

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.db.base import get_db
 from app.schemas.user import UserLogin, Token, UserResponse
 from app.services.user_service import UserService
-from app.core.deps import get_current_user
+from app.core.deps import get_current_user, get_token
 from config import settings
 
 router = APIRouter()
@@ -44,6 +44,27 @@ def login(
         expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         user=UserResponse.from_orm(user)
     )
+
+
+@router.post("/logout", summary="用户退出登录")
+def logout(
+    token: str = Depends(get_token),
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """用户退出登录"""
+    user_service = UserService(db)
+    
+    # 将token加入黑名单
+    success = user_service.logout_user(token)
+    
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="退出登录失败"
+        )
+    
+    return {"message": "退出登录成功"}
 
 
 @router.get("/me", response_model=UserResponse, summary="获取当前用户信息")

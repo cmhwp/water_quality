@@ -14,6 +14,13 @@ from app.schemas.user import TokenData
 security = HTTPBearer()
 
 
+def get_token(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> str:
+    """获取原始token字符串"""
+    return credentials.credentials
+
+
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)

@@ -73,7 +73,6 @@ class WaterQualityService:
         for key, value in update_data.items():
             setattr(db_water_quality, key, value)
         
-        db_water_quality.updated_at = datetime.now()
         self.db.commit()
         self.db.refresh(db_water_quality)
         return db_water_quality
@@ -115,9 +114,9 @@ class WaterQualityService:
         polluted_count = 0
         
         for level, count in quality_stats:
-            if level and ('I类' in level or 'II类' in level or 'III类' in level):
+            if level and ('Ⅰ类' in level or 'Ⅱ类' in level or 'Ⅲ类' in level):
                 excellent_count += count
-            elif level and ('IV类' in level or 'V类' in level):
+            elif level and ('Ⅳ类' in level or 'Ⅴ类' in level or '劣Ⅴ类' in level or '重度黑臭' in level):
                 polluted_count += count
         
         return {
