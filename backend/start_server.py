@@ -35,6 +35,30 @@ def check_and_install_dependencies():
             print(f"❌ 依赖包安装失败: {e}")
             return False
 
+def check_environment():
+    """检查环境配置"""
+    print("检查环境配置...")
+    
+    if not os.path.exists(".env"):
+        print("❌ 环境变量文件不存在")
+        if os.path.exists("env.example"):
+            print("正在从模板创建环境变量文件...")
+            try:
+                import shutil
+                shutil.copy("env.example", ".env")
+                print("✅ 已创建 .env 文件")
+                print("⚠️  请检查并修改 .env 文件中的配置，特别是 SECRET_KEY")
+            except Exception as e:
+                print(f"❌ 创建环境变量文件失败: {e}")
+                return False
+        else:
+            print("❌ 找不到环境变量模板文件 env.example")
+            return False
+    else:
+        print("✅ 环境变量文件存在")
+    
+    return True
+
 def check_database():
     """检查数据库"""
     print("检查数据库...")
@@ -95,6 +119,10 @@ def main():
     
     # 检查依赖
     if not check_and_install_dependencies():
+        sys.exit(1)
+    
+    # 检查环境配置
+    if not check_environment():
         sys.exit(1)
     
     # 检查数据库

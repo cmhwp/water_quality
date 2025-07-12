@@ -4,7 +4,7 @@
 from typing import List, Optional
 from datetime import datetime
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 from app.models.water_quality import WaterQuality
 from app.schemas.water_quality import WaterQualityCreate, WaterQualityUpdate, WaterQualityQuery
 from config import settings
@@ -95,22 +95,35 @@ class WaterQualityService:
         # 按河道统计
         river_stats = self.db.query(
             WaterQuality.river_name,
-            self.db.func.count(WaterQuality.id).label('count')
+            func.count(WaterQuality.id).label('count')
         ).group_by(WaterQuality.river_name).all()
         
         # 按水质等级统计
         quality_stats = self.db.query(
             WaterQuality.comprehensive_quality_level,
-            self.db.func.count(WaterQuality.id).label('count')
+            func.count(WaterQuality.id).label('count')
         ).group_by(WaterQuality.comprehensive_quality_level).all()
         
         # 按月份统计
         monthly_stats = self.db.query(
-            self.db.func.date_format(WaterQuality.sampling_date, '%Y-%m').label('month'),
-            self.db.func.count(WaterQuality.id).label('count')
+            func.strftime('%Y-%m', WaterQuality.sampling_date).label('month'),
+            func.count(WaterQuality.id).label('count')
         ).group_by('month').order_by('month').all()
         
+        # 计算优质水质(I-III类)和污染水质(IV-V类)数量
+        excellent_count = 0
+        polluted_count = 0
+        
+        for level, count in quality_stats:
+            if level and ('I类' in level or 'II类' in level or 'III类' in level):
+                excellent_count += count
+            elif level and ('IV类' in level or 'V类' in level):
+                polluted_count += count
+        
         return {
+            'total': total_count,
+            'excellent': excellent_count,
+            'polluted': polluted_count,
             'total_count': total_count,
             'river_stats': [{'river_name': r[0], 'count': r[1]} for r in river_stats],
             'quality_stats': [{'level': q[0], 'count': q[1]} for q in quality_stats],

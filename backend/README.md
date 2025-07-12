@@ -214,6 +214,30 @@ pip install pytest pytest-asyncio httpx
 pytest
 ```
 
+## Git 配置
+
+### .gitignore 文件
+项目包含了完善的 `.gitignore` 配置：
+
+- **后端专用**: `backend/.gitignore` - 包含 Python、数据库、日志文件等忽略规则
+- **项目通用**: 根目录的 `.gitignore` - 包含通用的编辑器、系统文件等
+
+### 重要的被忽略文件
+- `water_quality.db` - 数据库文件
+- `.env` - 环境变量文件
+- `logs/` - 日志目录
+- `__pycache__/` - Python 缓存
+- 各种编辑器配置文件
+
+### 首次设置
+```bash
+# 复制环境变量模板
+cp env.example .env
+
+# 编辑配置（修改SECRET_KEY等敏感信息）
+vim .env
+```
+
 ## 许可证
 
 MIT License 

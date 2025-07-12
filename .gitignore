@@ -1,0 +1,112 @@
+# 编辑器和IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 环境变量文件
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# 依赖目录
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 构建输出
+dist/
+build/
+*.egg-info/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+temp/
+tmp/
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# 备份文件
+backup/
+backups/
+*.backup
+
+# 敏感配置文件
+config.local.*
+settings.local.*
+
+# 证书文件
+*.pem
+*.key
+*.crt
+*.cert
+
+# 覆盖率报告
+coverage/
+.coverage
+*.cover
+
+# 测试结果
+.pytest_cache/
+.cache/
+
+# 部署文件
+docker-compose.override.yml
+*.local.yml
+*.local.yaml
+
+# 本地开发文件
+.local/
+local_*
+
+# 前端特定文件
+# 如果使用 npm/yarn
+package-lock.json
+yarn.lock
+
+# 如果使用构建工具
+.nuxt/
+.next/
+.svelte-kit/
+
+# 后端特定文件
+# Python 虚拟环境
+venv/
+env/
+.venv/
+
+# FastAPI/Django 相关
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# 数据文件（根据需要调整）
+# *.xlsx
+# *.csv
+# *.json 
