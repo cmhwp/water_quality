@@ -26,6 +26,10 @@
                   <SettingOutlined />
                   系统设置
                 </a-menu-item>
+                <a-menu-item key="dashboard">
+                  <DashboardOutlined />
+                  返回首页
+                </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item key="logout">
                   <LogoutOutlined />
@@ -223,7 +227,8 @@ import {
   PlusOutlined,
   UnorderedListOutlined,
   DownloadOutlined,
-  ReloadOutlined
+  ReloadOutlined,
+  DashboardOutlined
 } from '@ant-design/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 import { 
@@ -482,6 +487,9 @@ const handleMenuClick = async ({ key }: { key: string }) => {
     case 'logout':
       await authStore.logout()
       router.push('/admin/login')
+      break
+    case 'dashboard':
+      router.push('/dashboard')
       break
   }
 }

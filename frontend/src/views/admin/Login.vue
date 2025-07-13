@@ -130,7 +130,7 @@ const handleLogin = async () => {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: linear-gradient( 109.6deg,  rgba(75,228,255,1) 11.2%, rgba(188,204,251,1) 100.6% );
 }
 
 .login-background {
@@ -149,9 +149,9 @@ const handleLogin = async () => {
   right: 0;
   bottom: 0;
   background-image: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(75, 228, 255, 0.3) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+    radial-gradient(circle at 40% 40%, rgba(188, 204, 251, 0.2) 0%, transparent 50%);
   animation: float 6s ease-in-out infinite;
 }
 
@@ -198,14 +198,14 @@ const handleLogin = async () => {
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(109.6deg, rgba(75,228,255,1) 11.2%, rgba(188,204,251,1) 100.6%);
   border: none;
   transition: all 0.3s ease;
 }
 
 .login-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(75, 228, 255, 0.3);
 }
 
 .login-footer {
@@ -228,8 +228,8 @@ const handleLogin = async () => {
 }
 
 :deep(.ant-input-affix-wrapper:focus) {
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  border-color: #4be4ff;
+  box-shadow: 0 0 0 2px rgba(75, 228, 255, 0.2);
 }
 
 :deep(.ant-checkbox-wrapper) {

@@ -11,6 +11,12 @@
             </template>
             方式细分
           </a-button>
+          <a-button type="default" @click="goToAdminPanel">
+            <template #icon>
+              <SettingOutlined />
+            </template>
+            管理后台
+          </a-button>
         </div>
         <div class="update-time">
           最后更新：{{ formatTime(dashboardData?.overview?.latest_update) }}
@@ -77,7 +83,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { AppstoreOutlined } from '@ant-design/icons-vue'
+import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue'
 import { getDashboardDataApiV1DashboardAllGet } from '@/services/api/dashboard'
 import OverviewStats from '@/components/dashboard/OverviewStats.vue'
 import RiverDistributionChart from '@/components/dashboard/RiverDistributionChart.vue'
@@ -111,6 +117,11 @@ const fetchDashboardData = async () => {
 // 导航到方式概览
 const goToMethodsOverview = () => {
   router.push('/dashboard/methods')
+}
+
+// 导航到管理后台
+const goToAdminPanel = () => {
+  router.push('/admin')
 }
 
 // 处理河道统计数据，确保类型兼容
