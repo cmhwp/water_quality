@@ -18,6 +18,24 @@ from app.schemas.user import (
     Token,
     TokenData
 )
+from app.schemas.dashboard import (
+    OverviewStatistics,
+    RiverStatistics,
+    QualityLevelDistribution,
+    MonthlyTrend,
+    IndicatorStatistics,
+    RecentWaterQuality,
+    DashboardResponse,
+    RiverListResponse,
+    MethodStatistics,
+    MethodOverviewStatistics,
+    MethodRiverStatistics,
+    MethodQualityDistribution,
+    MethodMonthlyTrend,
+    MethodIndicatorStatistics,
+    MethodDashboardResponse,
+    MethodListResponse
+)
 
 __all__ = [
     "WaterQualityBase",
@@ -32,5 +50,21 @@ __all__ = [
     "UserResponse",
     "UserLogin",
     "Token",
-    "TokenData"
+    "TokenData",
+    "OverviewStatistics",
+    "RiverStatistics",
+    "QualityLevelDistribution",
+    "MonthlyTrend",
+    "IndicatorStatistics",
+    "RecentWaterQuality",
+    "DashboardResponse",
+    "RiverListResponse",
+    "MethodStatistics",
+    "MethodOverviewStatistics",
+    "MethodRiverStatistics",
+    "MethodQualityDistribution",
+    "MethodMonthlyTrend",
+    "MethodIndicatorStatistics",
+    "MethodDashboardResponse",
+    "MethodListResponse"
 ] 

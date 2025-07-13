@@ -47,12 +47,13 @@
               allow-clear
               style="width: 150px"
             >
-              <a-select-option value="I">I类</a-select-option>
-              <a-select-option value="II">II类</a-select-option>
-              <a-select-option value="III">III类</a-select-option>
-              <a-select-option value="IV">IV类</a-select-option>
-              <a-select-option value="V">V类</a-select-option>
-              <a-select-option value="劣V">劣V类</a-select-option>
+              <a-select-option value="Ⅰ类">I类</a-select-option>
+              <a-select-option value="Ⅱ类">II类</a-select-option>
+              <a-select-option value="Ⅲ类">III类</a-select-option>
+              <a-select-option value="Ⅳ类">IV类</a-select-option>
+              <a-select-option value="Ⅴ类">V类</a-select-option>
+              <a-select-option value="劣Ⅴ类">劣V类</a-select-option>
+              <a-select-option value="重度黑臭">重度黑臭</a-select-option>
             </a-select>
           </a-form-item>
           
@@ -289,12 +290,13 @@
             placeholder="请选择综合水质等级"
             style="width: 100%"
           >
-            <a-select-option value="I">I类</a-select-option>
-            <a-select-option value="II">II类</a-select-option>
-            <a-select-option value="III">III类</a-select-option>
-            <a-select-option value="IV">IV类</a-select-option>
-            <a-select-option value="V">V类</a-select-option>
-            <a-select-option value="劣V">劣V类</a-select-option>
+            <a-select-option value="Ⅰ类">I类</a-select-option>
+            <a-select-option value="Ⅱ类">II类</a-select-option>
+            <a-select-option value="Ⅲ类">III类</a-select-option>
+            <a-select-option value="Ⅳ类">IV类</a-select-option>
+            <a-select-option value="Ⅴ类">V类</a-select-option>
+            <a-select-option value="劣Ⅴ类">劣V类</a-select-option>
+            <a-select-option value="重度黑臭">重度黑臭</a-select-option>
           </a-select>
         </a-form-item>
         
@@ -365,7 +367,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import type { FormInstance, TableColumnsType } from 'ant-design-vue'
@@ -514,15 +516,15 @@ const modalRules = {
   ]
 }
 
-// 分页配置
-const paginationConfig = {
+// 分页配置（使用计算属性确保响应式）
+const paginationConfig = computed(() => ({
   current: pagination.current,
   pageSize: pagination.pageSize,
   total: pagination.total,
   showSizeChanger: pagination.showSizeChanger,
   showQuickJumper: pagination.showQuickJumper,
   showTotal: pagination.showTotal
-}
+}))
 
 // 获取数据
 const fetchData = async () => {
@@ -542,9 +544,20 @@ const fetchData = async () => {
       params.sampling_date_end = searchForm.samplingDateRange[1].format('YYYY-MM-DD')
     }
     
-    const response = await getWaterQualityListApiV1WaterQualityGet(params) as any
-    dataSource.value = response.items || []
-    pagination.total = response.total || 0
+    const response = await getWaterQualityListApiV1WaterQualityGet(params)
+    // 正确处理响应数据结构
+    const responseData = response.data || response
+    dataSource.value = responseData.items || []
+    pagination.total = responseData.total || 0
+    pagination.current = responseData.page || pagination.current
+    pagination.pageSize = responseData.per_page || pagination.pageSize
+    
+    console.log('Water quality data loaded:', {
+      total: pagination.total,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+      itemsCount: dataSource.value.length
+    })
   } catch (error) {
     console.error('Failed to fetch data:', error)
     message.error('获取数据失败')
@@ -556,12 +569,13 @@ const fetchData = async () => {
 // 获取水质等级颜色
 const getQualityColor = (level: string) => {
   const colorMap: Record<string, string> = {
-    'I': 'green',
-    'II': 'blue',
-    'III': 'yellow',
-    'IV': 'orange',
-    'V': 'red',
-    '劣V': 'purple'
+    'Ⅰ类': 'green',
+    'Ⅱ类': 'blue',
+    'Ⅲ类': 'yellow',
+    'Ⅳ类': 'orange',
+    'Ⅴ类': 'red',
+    '劣Ⅴ类': 'purple',
+    '重度黑臭': 'black'
   }
   return colorMap[level] || 'default'
 }
@@ -589,6 +603,7 @@ const resetSearch = () => {
 
 // 表格变化处理
 const handleTableChange = (pag: any) => {
+  console.log('Table change event:', pag)
   pagination.current = pag.current
   pagination.pageSize = pag.pageSize
   fetchData()

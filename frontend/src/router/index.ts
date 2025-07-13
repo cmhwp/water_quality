@@ -4,6 +4,30 @@ import { useAuthStore } from '@/stores/auth'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // 大屏可视化路由（公开访问）
+    {
+      path: '/',
+      redirect: '/dashboard',
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/Dashboard.vue'),
+      meta: { public: true }
+    },
+    {
+      path: '/dashboard/methods',
+      name: 'dashboard-methods',
+      component: () => import('../views/MethodsOverview.vue'),
+      meta: { public: true }
+    },
+    {
+      path: '/dashboard/method/:method',
+      name: 'dashboard-method',
+      component: () => import('../views/MethodDashboard.vue'),
+      meta: { public: true }
+    },
+    
     // 管理员路由
     {
       path: '/admin',
@@ -34,6 +58,12 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   
+  // 如果是公开路由，直接通过
+  if (to.meta.public) {
+    next()
+    return
+  }
+  
   // 初始化用户信息
   if (authStore.isAuthenticated && !authStore.user) {
     await authStore.init()
@@ -53,7 +83,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   
-  // 检查是否需要访客权限（已登录用户不能访问）
+  // 检查是否需要访客权限（已登录用户不能访问登录页）
   if (to.meta.requiresGuest && authStore.isAuthenticated) {
     next('/admin/dashboard')
     return
