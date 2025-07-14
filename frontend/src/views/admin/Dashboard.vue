@@ -251,6 +251,7 @@ const fetchStatistics = async () => {
   try {
     const data = await getWaterQualityStatisticsApiV1WaterQualityStatisticsOverviewGet()
     statistics.value = data
+    console.log(statistics.value)
   } catch (error) {
     console.error('Failed to fetch statistics:', error)
   }

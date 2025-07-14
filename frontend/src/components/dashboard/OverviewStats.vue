@@ -74,7 +74,7 @@
         </div>
         <div class="stat-content">
           <div class="stat-value">{{ data.polluted_count }}</div>
-          <div class="stat-label">污染水质 (重度黑臭)</div>
+          <div class="stat-label">污染水质 (轻度黑臭、重度黑臭)</div>
         </div>
       </div>
     </div>

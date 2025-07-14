@@ -1,5 +1,5 @@
 <template>
-  <div class="recent-data-table">
+  <div class="warning-data-table">
     <div class="table-container">
       <table class="data-table">
         <thead>
@@ -7,6 +7,7 @@
             <th>河道名称</th>
             <th>采样日期</th>
             <th>水质等级</th>
+            <th>警告等级</th>
             <th>COD</th>
             <th>氨氮</th>
             <th>总磷</th>
@@ -22,6 +23,11 @@
                 {{ item.comprehensive_quality_level }}
               </span>
             </td>
+            <td class="warning-level">
+              <span :class="getWarningClass(item.warning_level)">
+                {{ formatWarningLevel(item.warning_level) }}
+              </span>
+            </td>
             <td class="value">{{ formatValue(item.cod_value) }}</td>
             <td class="value">{{ formatValue(item.ammonia_nitrogen_value) }}</td>
             <td class="value">{{ formatValue(item.total_phosphorus_value) }}</td>
@@ -34,11 +40,12 @@
 </template>
 
 <script setup lang="ts">
-interface RecentData {
+interface WarningData {
   id: number
   river_name: string
   sampling_date: string
   comprehensive_quality_level: string
+  warning_level: string
   cod_value: number | null | undefined
   ammonia_nitrogen_value: number | null | undefined
   total_phosphorus_value: number | null | undefined
@@ -46,7 +53,7 @@ interface RecentData {
 }
 
 interface Props {
-  data: RecentData[]
+  data: WarningData[]
 }
 
 defineProps<Props>()
@@ -79,10 +86,32 @@ const getQualityClass = (level: string): string => {
   }
   return classes[level] || 'unknown'
 }
+
+// 获取警告等级样式类
+const getWarningClass = (level: string): string => {
+  const classes: Record<string, string> = {
+    'poor': 'warning-poor',
+    'very_poor': 'warning-very-poor',
+    'light_polluted': 'warning-light-polluted',
+    'polluted': 'warning-polluted'
+  }
+  return classes[level] || 'unknown'
+}
+
+// 格式化警告等级
+const formatWarningLevel = (level: string): string => {
+  const levelMap: Record<string, string> = {
+    'poor': 'Ⅴ类',
+    'very_poor': '劣Ⅴ类',
+    'light_polluted': '轻度黑臭',
+    'polluted': '重度黑臭'
+  }
+  return levelMap[level] || level
+}
 </script>
 
 <style scoped>
-.recent-data-table {
+.warning-data-table {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -153,6 +182,20 @@ const getQualityClass = (level: string): string => {
   min-width: 50px;
 }
 
+.warning-level {
+  min-width: 70px;
+}
+
+.warning-level span {
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+  min-width: 50px;
+}
+
 .quality-level .excellent {
   background: rgba(67, 233, 123, 0.2);
   color: #43e97b;
@@ -201,6 +244,36 @@ const getQualityClass = (level: string): string => {
   border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
+.warning-level .warning-poor {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.warning-level .warning-very-poor {
+  background: rgba(255, 87, 34, 0.2);
+  color: #ff5722;
+  border: 1px solid rgba(255, 87, 34, 0.3);
+}
+
+.warning-level .warning-light-polluted {
+  background: rgba(156, 39, 176, 0.2);
+  color: #9c27b0;
+  border: 1px solid rgba(156, 39, 176, 0.3);
+}
+
+.warning-level .warning-polluted {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.warning-level .unknown {
+  background: rgba(102, 126, 234, 0.2);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
 .value {
   text-align: right;
   font-family: 'Courier New', monospace;
@@ -238,7 +311,8 @@ const getQualityClass = (level: string): string => {
     padding: 6px 4px;
   }
   
-  .quality-level span {
+  .quality-level span,
+  .warning-level span {
     font-size: 9px;
     padding: 1px 4px;
     min-width: 40px;
@@ -252,7 +326,8 @@ const getQualityClass = (level: string): string => {
     min-width: 50px;
   }
   
-  .quality-level {
+  .quality-level,
+  .warning-level {
     min-width: 60px;
   }
   

@@ -1,30 +1,22 @@
 """
-数据模式模块
+数据模式包
 """
-from app.schemas.water_quality import (
-    WaterQualityBase,
-    WaterQualityCreate,
-    WaterQualityUpdate,
-    WaterQualityResponse,
-    WaterQualityListResponse,
-    WaterQualityQuery
+from .user import (
+    UserBase, UserCreate, UserUpdate, UserResponse, 
+    UserLogin, Token, TokenData
 )
-from app.schemas.user import (
-    UserBase,
-    UserCreate,
-    UserUpdate,
-    UserResponse,
-    UserLogin,
-    Token,
-    TokenData
+from .water_quality import (
+    WaterQualityBase, WaterQualityCreate, WaterQualityUpdate, 
+    WaterQualityResponse, WaterQualityListResponse, WaterQualityQuery
 )
-from app.schemas.dashboard import (
+from .dashboard import (
     OverviewStatistics,
     RiverStatistics,
     QualityLevelDistribution,
     MonthlyTrend,
     IndicatorStatistics,
     RecentWaterQuality,
+    WarningWaterQuality,
     DashboardResponse,
     RiverListResponse,
     MethodStatistics,
@@ -34,29 +26,36 @@ from app.schemas.dashboard import (
     MethodMonthlyTrend,
     MethodIndicatorStatistics,
     MethodDashboardResponse,
-    MethodListResponse
+    MethodListResponse,
+    IndicatorLevelDistribution,
+    IndicatorLevelStatistics,
+    WaterQualityLevelStatistics
 )
 
 __all__ = [
-    "WaterQualityBase",
-    "WaterQualityCreate", 
-    "WaterQualityUpdate",
-    "WaterQualityResponse",
-    "WaterQualityListResponse", 
-    "WaterQualityQuery",
+    # 用户相关
     "UserBase",
-    "UserCreate",
-    "UserUpdate", 
+    "UserCreate", 
+    "UserUpdate",
     "UserResponse",
     "UserLogin",
     "Token",
     "TokenData",
+    # 水质相关
+    "WaterQualityBase",
+    "WaterQualityCreate",
+    "WaterQualityUpdate",
+    "WaterQualityResponse",
+    "WaterQualityListResponse",
+    "WaterQualityQuery",
+    # 大屏相关
     "OverviewStatistics",
     "RiverStatistics",
     "QualityLevelDistribution",
     "MonthlyTrend",
     "IndicatorStatistics",
     "RecentWaterQuality",
+    "WarningWaterQuality",
     "DashboardResponse",
     "RiverListResponse",
     "MethodStatistics",
@@ -66,5 +65,8 @@ __all__ = [
     "MethodMonthlyTrend",
     "MethodIndicatorStatistics",
     "MethodDashboardResponse",
-    "MethodListResponse"
+    "MethodListResponse",
+    "IndicatorLevelDistribution",
+    "IndicatorLevelStatistics",
+    "WaterQualityLevelStatistics"
 ] 

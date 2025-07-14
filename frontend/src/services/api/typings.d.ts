@@ -10,8 +10,10 @@ declare namespace API {
     monthly_trend: MonthlyTrend[];
     /** Indicator Stats 指标统计 */
     indicator_stats: IndicatorStatistics[];
-    /** Recent Data 最新数据 */
+    /** Recent Data 最新数据(5条) */
     recent_data: RecentWaterQuality[];
+    /** Warning Data 警告数据(污染严重数据) */
+    warning_data: WarningWaterQuality[];
   };
 
   type deleteWaterQualityApiV1WaterQualityWaterQualityIdDeleteParams = {
@@ -56,6 +58,13 @@ declare namespace API {
     limit?: number;
   };
 
+  type getMethodWarningWaterQualityApiV1DashboardMethodMethodWarningDataGetParams =
+    {
+      method: string;
+      /** 返回数据条数限制 */
+      limit?: number;
+    };
+
   type getMonthlyTrendApiV1DashboardMonthlyTrendGetParams = {
     /** 返回月份数量限制 */
     limit?: number;
@@ -74,6 +83,11 @@ declare namespace API {
 
   type getRiverStatisticsApiV1DashboardRiversGetParams = {
     /** 返回河道数量限制 */
+    limit?: number;
+  };
+
+  type getWarningWaterQualityApiV1DashboardWarningDataGetParams = {
+    /** 返回数据条数限制 */
     limit?: number;
   };
 
@@ -101,6 +115,38 @@ declare namespace API {
   type HTTPValidationError = {
     /** Detail */
     detail?: ValidationError[];
+  };
+
+  type IndicatorLevelDistribution = {
+    /** Level 等级 */
+    level: string;
+    /** Count 数量 */
+    count: number;
+    /** Percentage 百分比 */
+    percentage: number;
+  };
+
+  type IndicatorLevelStatistics = {
+    /** Indicator Name 指标名称 */
+    indicator_name: string;
+    /** Indicator Code 指标代码 */
+    indicator_code: string;
+    /** Total Count 总数据量 */
+    total_count: number;
+    /** Level Distribution 等级分布 */
+    level_distribution: IndicatorLevelDistribution[];
+    /** Most Common Level 最常见等级 */
+    most_common_level: string;
+    /** Most Common Count 最常见等级数量 */
+    most_common_count: number;
+    /** Most Common Percentage 最常见等级百分比 */
+    most_common_percentage: number;
+    /** Qualified Rate 该指标合格率(I-III类) */
+    qualified_rate: number;
+    /** Unqualified Rate 该指标不合格率 */
+    unqualified_rate: number;
+    /** Warning Rate 该指标警告率(轻度+重度污染) */
+    warning_rate: number;
   };
 
   type IndicatorStatistics = {
@@ -133,8 +179,10 @@ declare namespace API {
     monthly_trend: MethodMonthlyTrend[];
     /** Indicator Stats 指标统计 */
     indicator_stats: MethodIndicatorStatistics[];
-    /** Recent Data 最新数据 */
+    /** Recent Data 最新数据(5条) */
     recent_data: RecentWaterQuality[];
+    /** Warning Data 警告数据(污染严重数据) */
+    warning_data: WarningWaterQuality[];
   };
 
   type MethodIndicatorStatistics = {
@@ -189,7 +237,7 @@ declare namespace API {
     poor_count: number;
     /** Very Poor Count 极差水质数量(劣V类) */
     very_poor_count: number;
-    /** Polluted Count 污染水质数量(重度黑臭) */
+    /** Polluted Count 污染水质数量(轻度黑臭、重度黑臭) */
     polluted_count: number;
     /** Excellent Rate 优质水质达标率 */
     excellent_rate: number;
@@ -274,7 +322,7 @@ declare namespace API {
     poor_count: number;
     /** Very Poor Count 极差水质数量(劣V类) */
     very_poor_count: number;
-    /** Polluted Count 污染水质数量(重度黑臭) */
+    /** Polluted Count 污染水质数量(轻度黑臭、重度黑臭) */
     polluted_count: number;
     /** Excellent Rate 优质水质达标率 */
     excellent_rate: number;
@@ -390,13 +438,34 @@ declare namespace API {
     type: string;
   };
 
+  type WarningWaterQuality = {
+    /** Id 数据ID */
+    id: number;
+    /** River Name 河道名称 */
+    river_name: string;
+    /** Sampling Date 采样日期 */
+    sampling_date: string;
+    /** Comprehensive Quality Level 综合水质等级 */
+    comprehensive_quality_level: string;
+    /** Cod Value COD值 */
+    cod_value?: number | null;
+    /** Ammonia Nitrogen Value 氨氮值 */
+    ammonia_nitrogen_value?: number | null;
+    /** Total Phosphorus Value 总磷值 */
+    total_phosphorus_value?: number | null;
+    /** Potassium Permanganate Value 高锰酸钾值 */
+    potassium_permanganate_value?: number | null;
+    /** Warning Level 警告等级(poor:Ⅴ类, very_poor:劣Ⅴ类, light_polluted:轻度黑臭, polluted:重度黑臭) */
+    warning_level: string;
+  };
+
   type WaterQualityCreate = {
     /** Sampling Date 取样日期 */
-    sampling_date: string;
+    sampling_date: string | string;
     /** Sampling Time 取样时间 */
     sampling_time?: string | null;
     /** Detection Date 检测日期 */
-    detection_date: string;
+    detection_date: string | string;
     /** Code 编号 */
     code?: string | null;
     /** River Name 河道名称 */
@@ -427,6 +496,25 @@ declare namespace API {
     remarks?: string | null;
   };
 
+  type WaterQualityLevelStatistics = {
+    /** COD等级统计 */
+    cod_stats: IndicatorLevelStatistics;
+    /** 氨氮等级统计 */
+    ammonia_nitrogen_stats: IndicatorLevelStatistics;
+    /** 总磷等级统计 */
+    total_phosphorus_stats: IndicatorLevelStatistics;
+    /** 高锰酸钾等级统计 */
+    potassium_permanganate_stats: IndicatorLevelStatistics;
+    /** Overall Summary 总体概况 */
+    overall_summary: Record<string, any>;
+    /** Qualified Rate 合格率(I-III类) */
+    qualified_rate: number;
+    /** Unqualified Rate 不合格率 */
+    unqualified_rate: number;
+    /** Warning Rate 警告率(轻度+重度污染) */
+    warning_rate: number;
+  };
+
   type WaterQualityListResponse = {
     /** Total 总数 */
     total: number;
@@ -440,11 +528,11 @@ declare namespace API {
 
   type WaterQualityResponse = {
     /** Sampling Date 取样日期 */
-    sampling_date: string;
+    sampling_date: string | string;
     /** Sampling Time 取样时间 */
     sampling_time?: string | null;
     /** Detection Date 检测日期 */
-    detection_date: string;
+    detection_date: string | string;
     /** Code 编号 */
     code?: string | null;
     /** River Name 河道名称 */
@@ -483,11 +571,11 @@ declare namespace API {
 
   type WaterQualityUpdate = {
     /** Sampling Date 取样日期 */
-    sampling_date?: string | null;
+    sampling_date?: string | string | null;
     /** Sampling Time 取样时间 */
     sampling_time?: string | null;
     /** Detection Date 检测日期 */
-    detection_date?: string | null;
+    detection_date?: string | string | null;
     /** Code 编号 */
     code?: string | null;
     /** River Name 河道名称 */

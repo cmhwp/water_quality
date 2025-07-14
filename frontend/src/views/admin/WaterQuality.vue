@@ -53,6 +53,7 @@
               <a-select-option value="Ⅳ类">IV类</a-select-option>
               <a-select-option value="Ⅴ类">V类</a-select-option>
               <a-select-option value="劣Ⅴ类">劣V类</a-select-option>
+              <a-select-option value="轻度黑臭">轻度黑臭</a-select-option>
               <a-select-option value="重度黑臭">重度黑臭</a-select-option>
             </a-select>
           </a-form-item>
@@ -296,6 +297,7 @@
             <a-select-option value="Ⅳ类">IV类</a-select-option>
             <a-select-option value="Ⅴ类">V类</a-select-option>
             <a-select-option value="劣Ⅴ类">劣V类</a-select-option>
+            <a-select-option value="轻度黑臭">轻度黑臭</a-select-option>
             <a-select-option value="重度黑臭">重度黑臭</a-select-option>
           </a-select>
         </a-form-item>

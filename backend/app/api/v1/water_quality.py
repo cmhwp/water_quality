@@ -185,4 +185,25 @@ def get_quality_levels(
     """获取水质等级列表"""
     water_quality_service = WaterQualityService(db)
     
-    return water_quality_service.get_quality_levels() 
+    return water_quality_service.get_quality_levels()
+
+
+@router.post("/recalculate-levels", summary="重新计算所有水质数据的等级")
+def recalculate_all_levels(
+    current_user = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """重新计算所有水质数据的等级（管理员操作）"""
+    water_quality_service = WaterQualityService(db)
+    
+    try:
+        updated_count = water_quality_service.recalculate_all_levels()
+        return {
+            "message": f"成功重新计算了 {updated_count} 条水质数据的等级",
+            "updated_count": updated_count
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"重新计算等级失败: {str(e)}"
+        ) 

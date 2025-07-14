@@ -31,6 +31,7 @@ const getLevelColor = (level: string) => {
     'Ⅳ类': '#f093fb',
     'Ⅴ类': '#ff6b6b',
     '劣Ⅴ类': '#ee5a52',
+    '轻度黑臭': '#795548',
     '重度黑臭': '#2c3e50'
   }
   return colors[level] || '#667eea'

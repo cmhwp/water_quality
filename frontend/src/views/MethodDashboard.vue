@@ -57,10 +57,16 @@
       <!-- 第三行：指标统计和最新数据 -->
       <div class="bottom-section">
         <div class="stats-row">
-          <!-- 指标统计 -->
+          <!-- 水质等级统计 -->
           <div class="stats-card">
-            <h3>指标统计</h3>
-            <IndicatorStats :data="adaptMethodIndicatorToIndicator(methodDashboardData.indicator_stats)" />
+            <h3>水质等级统计</h3>
+            <WaterQualityLevelStats :data="qualityLevelStats" />
+          </div>
+
+          <!-- 警告数据 -->
+          <div class="stats-card">
+            <h3>警告数据(top10)</h3>
+            <WarningLevelChart :data="processWarningData(methodDashboardData.warning_data)" />
           </div>
 
           <!-- 最新数据 -->
@@ -84,19 +90,21 @@
 import { ref, onMounted, onBeforeUnmount, nextTick, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ArrowLeftOutlined, AppstoreOutlined } from '@ant-design/icons-vue'
-import { getMethodDashboardDataApiV1DashboardMethodMethodAllGet } from '@/services/api/dashboard'
+import { getMethodDashboardDataApiV1DashboardMethodMethodAllGet, getWaterQualityLevelStatisticsApiV1DashboardQualityLevelsGet } from '@/services/api/dashboard'
 import OverviewStats from '@/components/dashboard/OverviewStats.vue'
 import RiverDistributionChart from '@/components/dashboard/RiverDistributionChart.vue'
 import QualityLevelChart from '@/components/dashboard/QualityLevelChart.vue'
 import MonthlyTrendChart from '@/components/dashboard/MonthlyTrendChart.vue'
-import IndicatorStats from '@/components/dashboard/IndicatorStats.vue'
+import WaterQualityLevelStats from '@/components/dashboard/WaterQualityLevelStats.vue'
 import RecentDataTable from '@/components/dashboard/RecentDataTable.vue'
+import WarningLevelChart from '@/components/dashboard/WarningLevelChart.vue'
 
 const router = useRouter()
 const route = useRoute()
 
 // 响应式数据
 const methodDashboardData = ref<API.MethodDashboardResponse | null>(null)
+const qualityLevelStats = ref<API.WaterQualityLevelStatistics | null>(null)
 const loading = ref(true)
 const dashboardContainer = ref<HTMLElement>()
 const scaleFactor = ref(1)
@@ -110,12 +118,18 @@ const methodName = computed(() => {
 // 获取方式大屏数据
 const fetchMethodDashboardData = async () => {
   try {
-    const response = await getMethodDashboardDataApiV1DashboardMethodMethodAllGet({
-      method: methodName.value
-    })
-    methodDashboardData.value = response
+    const [methodResponse, qualityLevelResponse] = await Promise.all([
+      getMethodDashboardDataApiV1DashboardMethodMethodAllGet({
+        method: methodName.value
+      }),
+      getWaterQualityLevelStatisticsApiV1DashboardQualityLevelsGet()
+    ])
+    
+    methodDashboardData.value = methodResponse
+    qualityLevelStats.value = qualityLevelResponse.data || qualityLevelResponse
     loading.value = false
-    console.log('Method dashboard data loaded:', response)
+    console.log('Method dashboard data loaded:', methodResponse)
+    console.log('Quality level stats loaded:', qualityLevelResponse)
   } catch (error) {
     console.error('获取方式大屏数据失败:', error)
     loading.value = false
@@ -180,21 +194,21 @@ const adaptMethodMonthlyToMonthly = (methodMonthlyTrend: API.MethodMonthlyTrend[
   }))
 }
 
-// 适配器函数：将方式指标统计转换为指标统计格式
-const adaptMethodIndicatorToIndicator = (methodIndicatorStats: API.MethodIndicatorStatistics[]): API.IndicatorStatistics[] => {
-  return methodIndicatorStats.map(stat => ({
-    indicator_name: stat.indicator_name,
-    avg_value: stat.avg_value ?? null,
-    max_value: stat.max_value ?? null,
-    min_value: stat.min_value ?? null,
-    unit: stat.unit,
-    standard_value: stat.standard_value ?? null,
-    exceed_rate: stat.exceed_rate
-  }))
-}
+
 
 // 处理最新数据
 const processRecentData = (data: API.RecentWaterQuality[]) => {
+  return data.map(item => ({
+    ...item,
+    cod_value: item.cod_value ?? null,
+    ammonia_nitrogen_value: item.ammonia_nitrogen_value ?? null,
+    total_phosphorus_value: item.total_phosphorus_value ?? null,
+    potassium_permanganate_value: item.potassium_permanganate_value ?? null
+  }))
+}
+
+// 处理警告数据
+const processWarningData = (data: API.WarningWaterQuality[]) => {
   return data.map(item => ({
     ...item,
     cod_value: item.cod_value ?? null,
@@ -313,7 +327,7 @@ onBeforeUnmount(() => {
 }
 
 .dashboard-content {
-  padding: 20px 40px;
+  padding: 15px 30px;
   width: 1920px;
   height: calc(1080px - 80px);
   position: relative;
@@ -321,26 +335,27 @@ onBeforeUnmount(() => {
 }
 
 .overview-section {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .charts-section {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .chart-row {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 15px;
+  margin-bottom: 15px;
 }
 
 .chart-card {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 300px;
 }
 
 .chart-card.wide {
@@ -348,35 +363,38 @@ onBeforeUnmount(() => {
 }
 
 .chart-card h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
+  margin: 0 0 12px 0;
+  font-size: 16px;
   font-weight: 600;
   color: #ffffff;
+  text-align: center;
 }
 
 .bottom-section {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .stats-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
 }
 
 .stats-card {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 250px;
 }
 
 .stats-card h3 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
+  margin: 0 0 12px 0;
+  font-size: 16px;
   font-weight: 600;
   color: #ffffff;
+  text-align: center;
 }
 
 .loading {
@@ -395,32 +413,54 @@ onBeforeUnmount(() => {
 
 /* 响应式设计 */
 @media (max-width: 1400px) {
+  .dashboard-header {
+    padding: 12px 25px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 28px;
+  }
+  
+  .dashboard-content {
+    padding: 12px 25px;
+  }
+  
   .chart-row {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .chart-card {
+    min-height: 250px;
+    padding: 12px;
   }
   
   .chart-card.wide {
     grid-column: span 2;
   }
+  
+  /* 在中等屏幕上将三列改为两列 */
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .stats-card {
+    min-height: 200px;
+    padding: 12px;
+  }
+  
+  /* 水质等级统计占整行 */
+  .stats-card:first-child {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 768px) {
-  .chart-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-card.wide {
-    grid-column: span 1;
-  }
-  
-  .stats-row {
-    grid-template-columns: 1fr;
-  }
-  
   .dashboard-header {
-    padding: 15px 20px;
+    padding: 10px 15px;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
   }
   
   .dashboard-header h1 {
@@ -428,7 +468,42 @@ onBeforeUnmount(() => {
   }
   
   .dashboard-content {
-    padding: 20px;
+    padding: 10px 15px;
+  }
+  
+  .chart-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .chart-card {
+    min-height: 200px;
+    padding: 10px;
+  }
+  
+  .chart-card.wide {
+    grid-column: span 1;
+  }
+  
+  .chart-card h3,
+  .stats-card h3 {
+    font-size: 14px;
+    margin: 0 0 8px 0;
+  }
+  
+  /* 在小屏幕上改为单列布局 */
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .stats-card {
+    min-height: 150px;
+    padding: 10px;
+  }
+  
+  .stats-card:first-child {
+    grid-column: 1;
   }
 }
 </style> 

@@ -1,17 +1,18 @@
 """
 水质数据模式
 """
-from datetime import datetime
-from typing import Optional
+from datetime import datetime, date
+from typing import Optional, Union
 from pydantic import BaseModel, Field, validator
+from app.utils.water_quality_calculator import WaterQualityCalculator
 
 
 class WaterQualityBase(BaseModel):
     """水质数据基础模式"""
     
-    sampling_date: datetime = Field(..., description="取样日期")
+    sampling_date: Union[datetime, date] = Field(..., description="取样日期")
     sampling_time: Optional[str] = Field(None, description="取样时间")
-    detection_date: datetime = Field(..., description="检测日期")
+    detection_date: Union[datetime, date] = Field(..., description="检测日期")
     code: Optional[str] = Field(None, description="编号")
     river_name: str = Field(..., description="河道名称")
     method: Optional[str] = Field(None, description="方式")
@@ -34,6 +35,39 @@ class WaterQualityBase(BaseModel):
     
     # 备注
     remarks: Optional[str] = Field(None, description="备注")
+    
+    @validator('sampling_date', 'detection_date', pre=True)
+    def parse_date(cls, v):
+        """解析日期字符串"""
+        if v is None:
+            return v
+        if isinstance(v, (datetime, date)):
+            return v
+        if isinstance(v, str):
+            try:
+                # 尝试解析为日期
+                return datetime.strptime(v, '%Y-%m-%d')
+            except ValueError:
+                try:
+                    # 尝试解析为日期时间
+                    return datetime.fromisoformat(v)
+                except ValueError:
+                    raise ValueError(f"Invalid date format: {v}")
+        return v
+    
+    @validator('cod_value', 'ammonia_nitrogen_value', 'total_phosphorus_value', 'potassium_permanganate_value')
+    def validate_positive_values(cls, v):
+        """验证水质指标数值必须为正数"""
+        if v is not None and v < 0:
+            raise ValueError("水质指标数值必须为正数")
+        return v
+    
+    @validator('comprehensive_level_number')
+    def validate_level_number(cls, v):
+        """验证等级数范围"""
+        if v is not None and (v < 0 or v > 6):
+            raise ValueError("等级数必须在0-6之间")
+        return v
 
 
 class WaterQualityCreate(WaterQualityBase):
@@ -44,9 +78,9 @@ class WaterQualityCreate(WaterQualityBase):
 class WaterQualityUpdate(BaseModel):
     """更新水质数据模式"""
     
-    sampling_date: Optional[datetime] = Field(None, description="取样日期")
+    sampling_date: Optional[Union[datetime, date]] = Field(None, description="取样日期")
     sampling_time: Optional[str] = Field(None, description="取样时间")
-    detection_date: Optional[datetime] = Field(None, description="检测日期")
+    detection_date: Optional[Union[datetime, date]] = Field(None, description="检测日期")
     code: Optional[str] = Field(None, description="编号")
     river_name: Optional[str] = Field(None, description="河道名称")
     method: Optional[str] = Field(None, description="方式")
@@ -69,6 +103,25 @@ class WaterQualityUpdate(BaseModel):
     
     # 备注
     remarks: Optional[str] = Field(None, description="备注")
+    
+    @validator('sampling_date', 'detection_date', pre=True)
+    def parse_date(cls, v):
+        """解析日期字符串"""
+        if v is None:
+            return v
+        if isinstance(v, (datetime, date)):
+            return v
+        if isinstance(v, str):
+            try:
+                # 尝试解析为日期
+                return datetime.strptime(v, '%Y-%m-%d')
+            except ValueError:
+                try:
+                    # 尝试解析为日期时间
+                    return datetime.fromisoformat(v)
+                except ValueError:
+                    raise ValueError(f"Invalid date format: {v}")
+        return v
 
 
 class WaterQualityResponse(WaterQualityBase):
