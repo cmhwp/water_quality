@@ -192,7 +192,7 @@ const indicators = computed(() => {
 .quality-level-stats {
   width: 100%;
   height: 100%;
-  color: #ffffff;
+  color: #212529;
 }
 
 .stats-header {
@@ -201,7 +201,7 @@ const indicators = computed(() => {
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .most-common-level {
@@ -239,13 +239,13 @@ const indicators = computed(() => {
 
 .level-name {
   font-size: 12px;
-  color: #b0b0b0;
+  color: #6c757d;
   margin-top: 2px;
 }
 
 .level-label {
   font-size: 12px;
-  color: #b0b0b0;
+  color: #6c757d;
   text-align: center;
 }
 
@@ -288,7 +288,7 @@ const indicators = computed(() => {
 
 .overall-label {
   font-size: 11px;
-  color: #b0b0b0;
+  color: #6c757d;
 }
 
 .indicators-rates {
@@ -302,15 +302,16 @@ const indicators = computed(() => {
 }
 
 .indicator-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .indicator-card:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 1);
   transform: translateY(-2px);
 }
 
@@ -320,7 +321,7 @@ const indicators = computed(() => {
   align-items: center;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .indicator-title {
@@ -332,7 +333,7 @@ const indicators = computed(() => {
 
 .indicator-total {
   font-size: 12px;
-  color: #b0b0b0;
+  color: #6c757d;
 }
 
 .rates-container {
@@ -356,7 +357,7 @@ const indicators = computed(() => {
 
 .rate-label {
   font-size: 11px;
-  color: #b0b0b0;
+  color: #6c757d;
   margin-bottom: 4px;
 }
 
@@ -392,17 +393,17 @@ const indicators = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: 6px;
   font-size: 12px;
 }
 
 .most-common-label {
-  color: #b0b0b0;
+  color: #6c757d;
 }
 
 .most-common-value {
-  color: #ffffff;
+  color: #212529;
   font-weight: 600;
 }
 

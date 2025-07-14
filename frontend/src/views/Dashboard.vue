@@ -234,8 +234,8 @@ onBeforeUnmount(() => {
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #212529;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   overflow: hidden;
 }
@@ -245,9 +245,9 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 10;
 }
@@ -275,7 +275,7 @@ onBeforeUnmount(() => {
 
 .update-time {
   font-size: 14px;
-  color: #a0a0a0;
+  color: #6c757d;
 }
 
 .dashboard-content {
@@ -302,12 +302,13 @@ onBeforeUnmount(() => {
 }
 
 .chart-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   padding: 15px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   min-height: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chart-card.wide {
@@ -318,7 +319,7 @@ onBeforeUnmount(() => {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 12px 0;
-  color: #ffffff;
+  color: #212529;
   text-align: center;
 }
 
@@ -333,19 +334,20 @@ onBeforeUnmount(() => {
 }
 
 .stats-card {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   padding: 15px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   min-height: 250px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stats-card h3 {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 12px 0;
-  color: #ffffff;
+  color: #212529;
   text-align: center;
 }
 
@@ -356,7 +358,7 @@ onBeforeUnmount(() => {
   align-items: center;
   min-height: 60vh;
   font-size: 16px;
-  color: #a0a0a0;
+  color: #6c757d;
 }
 
 .loading p {

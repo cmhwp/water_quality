@@ -131,12 +131,12 @@ const formatWarningLevel = (level: string): string => {
 }
 
 .data-table th {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.05);
+  color: #212529;
   padding: 8px 6px;
   text-align: left;
   font-weight: 600;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -144,8 +144,8 @@ const formatWarningLevel = (level: string): string => {
 
 .data-table td {
   padding: 8px 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  color: #212529;
 }
 
 .data-row {
@@ -153,7 +153,7 @@ const formatWarningLevel = (level: string): string => {
 }
 
 .data-row:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .river-name {
@@ -163,7 +163,7 @@ const formatWarningLevel = (level: string): string => {
 }
 
 .date {
-  color: #a0a0a0 !important;
+  color: #6c757d !important;
   font-size: 11px;
   min-width: 60px;
 }
@@ -287,7 +287,7 @@ const formatWarningLevel = (level: string): string => {
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 3px;
 }
 

@@ -186,8 +186,8 @@ onBeforeUnmount(() => {
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #212529;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   overflow: hidden;
 }
@@ -197,9 +197,9 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 10;
 }
@@ -238,22 +238,23 @@ onBeforeUnmount(() => {
 }
 
 .method-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
   border-radius: 16px;
   padding: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
   flex: 1;
   min-width: 300px;
   max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .method-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   border-color: rgba(79, 172, 254, 0.5);
 }
 
@@ -278,7 +279,7 @@ onBeforeUnmount(() => {
   font-size: 24px;
   font-weight: 600;
   margin: 0;
-  color: #ffffff;
+  color: #212529;
 }
 
 .method-icon {
@@ -306,13 +307,13 @@ onBeforeUnmount(() => {
 
 .stat-label {
   font-size: 14px;
-  color: #a0a0a0;
+  color: #6c757d;
 }
 
 .stat-value {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: #212529;
 }
 
 .stat-value.excellent {
@@ -338,7 +339,7 @@ onBeforeUnmount(() => {
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -361,7 +362,7 @@ onBeforeUnmount(() => {
 }
 
 .update-time {
-  color: #a0a0a0;
+  color: #6c757d;
 }
 
 .view-detail {
@@ -378,7 +379,7 @@ onBeforeUnmount(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #ffffff;
+  color: #212529;
 }
 
 .loading p {

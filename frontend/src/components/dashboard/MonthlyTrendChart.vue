@@ -64,7 +64,7 @@ const initChart = () => {
     legend: {
       data: ['总数据量', '优质水质', '达标率'],
       textStyle: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 12
       },
       top: 10,
@@ -81,13 +81,13 @@ const initChart = () => {
       type: 'category',
       data: months,
       axisLabel: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 12,
         rotate: 45
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.3)'
+          color: 'rgba(0, 0, 0, 0.3)'
         }
       },
       axisTick: {
@@ -100,11 +100,11 @@ const initChart = () => {
         name: '数量',
         position: 'left',
         axisLabel: {
-          color: '#ffffff',
+          color: '#212529',
           fontSize: 12
         },
         nameTextStyle: {
-          color: '#ffffff',
+          color: '#212529',
           fontSize: 12
         },
         axisLine: {
@@ -115,7 +115,7 @@ const initChart = () => {
         },
         splitLine: {
           lineStyle: {
-            color: 'rgba(255, 255, 255, 0.1)',
+            color: 'rgba(0, 0, 0, 0.1)',
             type: 'dashed'
           }
         }
@@ -125,12 +125,12 @@ const initChart = () => {
         name: '达标率(%)',
         position: 'right',
         axisLabel: {
-          color: '#ffffff',
+          color: '#212529',
           fontSize: 12,
           formatter: '{value}%'
         },
         nameTextStyle: {
-          color: '#ffffff',
+          color: '#212529',
           fontSize: 12
         },
         axisLine: {

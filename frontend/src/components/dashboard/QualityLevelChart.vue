@@ -83,13 +83,13 @@ const initChart = () => {
       type: 'category',
       data: categories,
       axisLabel: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 12,
         rotate: 45
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.3)'
+          color: 'rgba(0, 0, 0, 0.3)'
         }
       },
       axisTick: {
@@ -99,7 +99,7 @@ const initChart = () => {
     yAxis: {
       type: 'value',
       axisLabel: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 12
       },
       axisLine: {
@@ -110,7 +110,7 @@ const initChart = () => {
       },
       splitLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(0, 0, 0, 0.1)',
           type: 'dashed'
         }
       }
@@ -133,7 +133,7 @@ const initChart = () => {
         label: {
           show: true,
           position: 'top',
-          color: '#ffffff',
+          color: '#212529',
           fontSize: 12,
           fontWeight: 'bold'
         },

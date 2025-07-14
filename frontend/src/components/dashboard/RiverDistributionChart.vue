@@ -67,7 +67,7 @@ const initChart = () => {
       top: 20,
       bottom: 20,
       textStyle: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 12
       },
       itemWidth: 12,
@@ -98,7 +98,7 @@ const initChart = () => {
             show: true,
             fontSize: 16,
             fontWeight: 'bold',
-            color: '#ffffff'
+            color: '#212529'
           },
           scale: true,
           scaleSize: 10

@@ -65,8 +65,8 @@ class WaterQualityBase(BaseModel):
     @validator('comprehensive_level_number')
     def validate_level_number(cls, v):
         """验证等级数范围"""
-        if v is not None and (v < 0 or v > 6):
-            raise ValueError("等级数必须在0-6之间")
+        if v is not None and (v < 0 or v > 10):
+            raise ValueError("等级数必须在0-10之间")
         return v
 
 

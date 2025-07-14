@@ -122,7 +122,17 @@
         <!-- 河道检测统计 -->
         <a-col :xs="24" :lg="16">
           <a-card title="河道检测统计" class="chart-card">
-            <div ref="riverChartRef" class="chart-container" style="height: 300px;"></div>
+            <template #extra>
+              <a-button 
+                v-if="statistics.river_stats && statistics.river_stats.length > 15"
+                type="link" 
+                size="small"
+                @click="showAllRivers"
+              >
+                查看全部 ({{ statistics.river_stats.length }})
+              </a-button>
+            </template>
+            <div ref="riverChartRef" class="chart-container" style="height: 500px;"></div>
           </a-card>
         </a-col>
         
@@ -207,6 +217,35 @@
         </a-col>
       </a-row>
     </div>
+    
+    <!-- 河道详情模态框 -->
+    <a-modal 
+      v-model:open="showRiverModal" 
+      title="河道检测统计详情"
+      :footer="null"
+      width="600px"
+      :bodyStyle="{ maxHeight: '60vh', overflow: 'auto' }"
+    >
+      <div class="river-details">
+        <div 
+          v-for="(item, index) in statistics.river_stats" 
+          :key="index"
+          class="river-item"
+        >
+          <div class="river-info">
+            <h4>{{ item.river_name }}</h4>
+            <p>检测次数: {{ item.count }}</p>
+          </div>
+          <div class="river-progress">
+            <a-progress 
+              :percent="Math.round((item.count / maxRiverCount) * 100)" 
+              :show-info="false"
+              stroke-color="#52c41a"
+            />
+          </div>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -245,6 +284,8 @@ const qualityChartRef = ref<HTMLElement>()
 const riverChartRef = ref<HTMLElement>()
 const statistics = ref<any>({})
 const recentRecords = ref<any[]>([])
+const showRiverModal = ref(false) // 新增：控制河道详情模态框的显示
+const maxRiverCount = ref(0) // 新增：用于计算百分比的最大检测次数
 
 // 获取统计数据
 const fetchStatistics = async () => {
@@ -387,31 +428,83 @@ const initRiverChart = () => {
   const chart = echarts.init(riverChartRef.value)
   
   const riverData = statistics.value.river_stats || []
-  const rivers = riverData.map((item: any) => item.river_name)
-  const counts = riverData.map((item: any) => item.count)
+  
+  // 动态调整显示的河道数量和图表高度
+  const maxDisplayCount = 15 // 最大显示数量
+  const displayData = riverData.slice(0, maxDisplayCount)
+  const rivers = displayData.map((item: any) => item.river_name)
+  const counts = displayData.map((item: any) => item.count)
+  
+  // 根据数据量动态调整图表高度
+  const baseHeight = 500
+  const itemHeight = 35 // 每个条目的高度
+  const minHeight = 300
+  const maxHeight = 800
+  const calculatedHeight = Math.min(maxHeight, Math.max(minHeight, baseHeight + (rivers.length - 10) * itemHeight))
+  
+  // 动态调整图表容器高度
+  if (riverChartRef.value) {
+    riverChartRef.value.style.height = `${calculatedHeight}px`
+  }
   
   const option = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'shadow'
+      },
+      formatter: (params: any) => {
+        const dataIndex = params[0].dataIndex
+        const originalData = displayData[dataIndex]
+        return `
+          <div style="padding: 8px;">
+            <div style="font-weight: bold; margin-bottom: 4px;">${originalData.river_name}</div>
+            <div>检测次数: ${originalData.count}</div>
+          </div>
+        `
       }
     },
     grid: {
       left: '3%',
-      right: '4%',
-      bottom: '3%',
+      right: '8%',
+      bottom: '8%',
+      top: '8%',
       containLabel: true
     },
     xAxis: {
-      type: 'value'
+      type: 'value',
+      name: '检测次数',
+      axisLabel: {
+        color: '#666',
+        fontSize: 12
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: '#e8e8e8',
+          type: 'dashed'
+        }
+      }
     },
     yAxis: {
       type: 'category',
       data: rivers,
       axisLabel: {
         interval: 0,
-        rotate: 0
+        rotate: 0,
+        fontSize: 11,
+        color: '#666',
+        width: 80,
+        overflow: 'truncate',
+        formatter: (value: string) => {
+          // 智能截断，优先保留关键信息
+          if (value.length <= 6) return value
+          if (value.length <= 10) return value.substring(0, 8) + '..'
+          return value.substring(0, 6) + '...'
+        }
+      },
+      axisTick: {
+        alignWithLabel: true
       }
     },
     series: [
@@ -419,11 +512,45 @@ const initRiverChart = () => {
         name: '检测次数',
         type: 'bar',
         data: counts,
+        barWidth: '65%',
         itemStyle: {
-          color: '#52c41a'
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+            { offset: 0, color: '#52c41a' },
+            { offset: 1, color: '#73d13d' }
+          ]),
+          borderRadius: [0, 4, 4, 0]
+        },
+        emphasis: {
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+              { offset: 0, color: '#389e0d' },
+              { offset: 1, color: '#52c41a' }
+            ])
+          }
+        },
+        label: {
+          show: true,
+          position: 'right',
+          fontSize: 11,
+          color: '#666',
+          formatter: '{c}'
         }
       }
     ]
+  } as any
+  
+  // 如果数据被截断，添加提示
+  if (riverData.length > maxDisplayCount) {
+    option.graphic = {
+      type: 'text',
+      right: 'center',
+      bottom: 20,
+      style: {
+        text: `显示前${maxDisplayCount}个河道，共${riverData.length}个`,
+        fontSize: 12,
+        fill: '#999'
+      }
+    }
   }
   
   chart.setOption(option)
@@ -431,6 +558,13 @@ const initRiverChart = () => {
   // 响应式处理
   window.addEventListener('resize', () => {
     chart.resize()
+  })
+  
+  // 图表交互
+  chart.on('click', (params: any) => {
+    const riverName = displayData[params.dataIndex].river_name
+    message.info(`点击查看 ${riverName} 的详细数据`)
+    // 这里可以添加跳转到详细页面的逻辑
   })
 }
 
@@ -474,6 +608,15 @@ const refreshData = async () => {
 // 导出数据
 const exportData = () => {
   message.info('导出功能开发中...')
+}
+
+// 查看全部河道数据
+const showAllRivers = () => {
+  showRiverModal.value = true
+  // 在模态框中显示完整的河道列表
+  // 需要从 statistics.value.river_stats 中获取所有数据
+  // 并计算 maxRiverCount
+  maxRiverCount.value = Math.max(...statistics.value.river_stats.map((item: any) => item.count))
 }
 
 // 菜单点击处理
@@ -652,6 +795,38 @@ onMounted(async () => {
   color: #6b7280;
 }
 
+.river-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.river-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+
+.river-info h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.river-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.river-progress {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
 @media (max-width: 768px) {
   .dashboard-header {
     padding: 12px 16px;
@@ -670,6 +845,36 @@ onMounted(async () => {
   
   .dashboard-title {
     font-size: 20px;
+  }
+  
+  .chart-container {
+    height: 300px !important;
+  }
+  
+  .river-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .river-progress {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-section,
+  .content-section {
+    padding: 12px;
+  }
+  
+  .chart-container {
+    height: 250px !important;
+  }
+  
+  .river-item {
+    padding: 8px 12px;
   }
 }
 </style> 

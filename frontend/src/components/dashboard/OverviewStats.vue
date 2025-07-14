@@ -114,12 +114,13 @@ defineProps<Props>()
   align-items: center;
   padding: 20px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stat-card::before {
@@ -134,7 +135,7 @@ defineProps<Props>()
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .stat-icon {
@@ -145,7 +146,7 @@ defineProps<Props>()
   align-items: center;
   justify-content: center;
   margin-right: 15px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   font-size: 20px;
 }
 
@@ -156,14 +157,14 @@ defineProps<Props>()
 .stat-value {
   font-size: 28px;
   font-weight: 700;
-  color: #ffffff;
+  color: #212529;
   margin-bottom: 5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
   font-size: 14px;
-  color: #b0b0b0;
+  color: #6c757d;
   font-weight: 400;
 }
 

@@ -148,8 +148,8 @@ const updateChart = () => {
             if (riverDetailData[riverName] && riverDetailData[riverName][levelKey]) {
               const levelData = riverDetailData[riverName][levelKey]
               
-              // 动态计算高度，每条数据约60px，最多显示5条不出现滚动条
-              const maxHeight = levelData.length > 5 ? '300px' : 'auto'
+              // 动态计算高度，每条数据约55px，最多显示12条不出现滚动条
+              const maxHeight = levelData.length > 12 ? '660px' : 'auto'
               tooltip += `<div style="margin-left: 15px; font-size: 11px; color: #ccc; max-height: ${maxHeight}; overflow-y: auto;">`
               
               levelData.forEach((item, index) => {
@@ -183,7 +183,7 @@ const updateChart = () => {
     legend: {
       data: series.map(s => s.name),
       textStyle: {
-        color: '#ffffff'
+        color: '#212529'
       },
       top: 10
     },
@@ -197,17 +197,17 @@ const updateChart = () => {
     xAxis: {
       type: 'value',
       axisLabel: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 10
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.3)'
+          color: 'rgba(0, 0, 0, 0.3)'
         }
       },
       splitLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.1)'
+          color: 'rgba(0, 0, 0, 0.1)'
         }
       }
     },
@@ -215,13 +215,13 @@ const updateChart = () => {
       type: 'category',
       data: rivers,
       axisLabel: {
-        color: '#ffffff',
+        color: '#212529',
         fontSize: 10,
         interval: 0
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.3)'
+          color: 'rgba(0, 0, 0, 0.3)'
         }
       }
     },

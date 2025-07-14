@@ -98,17 +98,18 @@ const getExceedRateClass = (rate: number): string => {
 }
 
 .indicator-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
   padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .indicator-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .indicator-card.exceeded {
@@ -122,18 +123,18 @@ const getExceedRateClass = (rate: number): string => {
   justify-content: space-between;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .indicator-header h4 {
   margin: 0;
-  color: #ffffff;
+  color: #212529;
   font-size: 14px;
   font-weight: 600;
 }
 
 .unit {
-  color: #a0a0a0;
+  color: #6c757d;
   font-size: 12px;
 }
 
@@ -154,13 +155,13 @@ const getExceedRateClass = (rate: number): string => {
 
 .label {
   font-size: 12px;
-  color: #b0b0b0;
+  color: #6c757d;
 }
 
 .value {
   font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
+  color: #212529;
 }
 
 .value.max {
@@ -178,12 +179,12 @@ const getExceedRateClass = (rate: number): string => {
 .exceed-rate {
   margin-top: 12px;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .exceed-label {
   font-size: 12px;
-  color: #b0b0b0;
+  color: #6c757d;
   margin-bottom: 4px;
 }
 
@@ -209,7 +210,7 @@ const getExceedRateClass = (rate: number): string => {
 .exceed-bar {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
   overflow: hidden;
 }
